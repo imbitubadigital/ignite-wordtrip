@@ -1,5 +1,6 @@
 import Head from "next/head";
 import {Header} from '../../components/Header'
+import {Loader} from '../../components/Loader'
 import {Banner} from '../../components/Continent/Banner'
 import {Details} from '../../components/Continent/Details'
 import {Cities} from '../../components/Continent/Cities'
@@ -8,12 +9,15 @@ import { GetStaticPaths, GetStaticProps } from "next";
 import { RichText } from 'prismic-dom';
 import { getPrismicClient } from "../../services/prismic";
 import Prismic from '@prismicio/client'
-
-
 import {ContinentProps} from '../_types/continent'
+import { useRouter } from "next/router";
 
 
 export default function Continent ({continent}: ContinentProps){
+  const router = useRouter();
+  if (router.isFallback) {
+    return <Loader />
+  }
 
   return (
     <>
@@ -23,8 +27,8 @@ export default function Continent ({continent}: ContinentProps){
       <Header back/>
       <Banner image={continent.banner} title={continent.title} />
       <Flex direction="column" maxW="1160px" mx="auto" mb="10" px="1rem">
-        <Details continent={continent} />
-         <Cities towns={continent.cities100} />
+         <Details continent={continent} />
+        <Cities towns={continent.cities100} />
       </Flex>
     </>
   )
